@@ -47,8 +47,15 @@ RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available
 RUN sed -i 's|/var/www/|/var/www/html/public/|g' /etc/apache2/apache2.conf
 RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
+# Copy entrypoint script
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Expose port 80
 EXPOSE 80
+
+# Use the entrypoint script
+ENTRYPOINT ["entrypoint.sh"]
 
 # Start Apache
 CMD ["apache2-foreground"]
